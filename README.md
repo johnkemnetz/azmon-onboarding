@@ -30,9 +30,9 @@ Before you begin, make sure that you have:
   1. [Installed the latest Azure PowerShell module](https://docs.microsoft.com/powershell/azure/install-azurerm-ps).
   2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
-```powershell
-  powershell.exe -ExecutionPolicy RemoteSigned
-```
+  ```powershell
+    powershell.exe -ExecutionPolicy RemoteSigned
+  ```
 
   [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
   3. Downloaded the scripts from the PowerShell Gallery:
@@ -92,9 +92,9 @@ Before you begin, make sure that you have:
   1. [Installed the latest Azure PowerShell module](https://docs.microsoft.com/powershell/azure/install-azurerm-ps).
   2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
-```powershell
-  powershell.exe -ExecutionPolicy RemoteSigned
-```
+  ```powershell
+    powershell.exe -ExecutionPolicy RemoteSigned
+  ```
 
   [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
   3. Downloaded the scripts from the PowerShell Gallery:
