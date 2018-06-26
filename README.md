@@ -32,7 +32,7 @@ Before you begin, make sure that you have:
 2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
     ```powershell
-      powershell.exe -ExecutionPolicy RemoteSigned
+    powershell.exe -ExecutionPolicy RemoteSigned
     ```
 
     [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
@@ -50,9 +50,7 @@ Once you have the scripts installed and have verified that you have the correct 
 This script enables Azure resource diagnostic settings on your Azure resources to route them to a particular Log Analytics workspace. To run it, type `.\Enable-AzureRMDiagnostics.ps1`. This prompts you for details like the resource ID of the workspace data should be sent to, the resource types and log categories of data that should be sent, and the scope (subscription/resource groups) of enablement. You can also run the command silently without promts by providing these details as parameters:
 
 ```powershell
-  .\Enable-AzureRMDiagnostics.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE
-    /providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512"
-    -ResourceType "Microsoft.Sql/servers/databases" -ResourceGroup "RGName" -Force
+.\Enable-AzureRMDiagnostics.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512" -ResourceType "Microsoft.Sql/servers/databases" -ResourceGroup "RGName" -Force
 ```
 
 To learn more about the parameters and available options for executing this script, just type ` Get-Help .\Enable-AzureRMDiagnostics.ps1 -detailed`.
@@ -61,16 +59,13 @@ To learn more about the parameters and available options for executing this scri
 This script enables the Activity Log connector for a Log Analytics workspace on selected subscriptions. To run it, type `./Enable-AzureActivityLogs.ps1`. This prompts you for details like the subscription ID and resource ID of the workspace where you want data to end up. You can also run the command silently without prompts by providing these details as parameters:
 
 ```powershell
-  .\enable-AzureActivityLogs.ps1 -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGr
-    oups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -Silent
+.\enable-AzureActivityLogs.ps1 -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -Silent
 ```
 
 Without providing a subscription ID, the script enables collection of the Activity Log on all subscriptions to which the logged in user has access. There's also an option to provide a list of subscription IDs on which you'd like to enable the Activity Log connector as input to the script:
 
 ```powershell
-  .\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -WSRESOURCEID "/subscri
-    ptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/work
-    spaces/OMSWS"
+.\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS"
 ```
 
 To learn more about the parameters and available options for executing this script, just type ` Get-Help .\Enable-AzureActivityLogs.ps1 -detailed`.
@@ -95,7 +90,7 @@ Before you begin, make sure that you have:
   2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
   ```powershell
-    powershell.exe -ExecutionPolicy RemoteSigned
+  powershell.exe -ExecutionPolicy RemoteSigned
   ```
 
   [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
@@ -112,10 +107,7 @@ Once you have the scripts installed and have verified that you have the correct 
 This script enables Azure resource diagnostic settings on your Azure resources to route them to a particular event hubs namespace. To run it, type `.\Enable-AzureRMDiagnosticsEventHubs.ps1`. This prompts you for details like the event hubs namespace where data should be sent to, the resource types and log categories of data that should be sent, and the scope (subscription/resource groups) of enablement. You can also run the command silently without promts by providing these details as parameters:
 
 ```powershell
-  .\Enable-AzureRMDiagnosticsEventHubs.ps1 -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resource
-    Groups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey"
-    -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512" -ResourceType "Microsoft.Sql/servers/databases"
-    -ResourceGroup "RGName" -Force
+.\Enable-AzureRMDiagnosticsEventHubs.ps1 -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512" -ResourceType "Microsoft.Sql/servers/databases" -ResourceGroup "RGName" -Force
 ```
 
 To learn more about the parameters and available options for executing this script, just type ` Get-Help .\Enable-AzureRMDiagnostics.ps1 -detailed`.
@@ -124,13 +116,13 @@ To learn more about the parameters and available options for executing this scri
 This script enables Log Profiles to send Activity Log data from subscriptions to an event hubs namespace. To run it, type `./Enable-AzureActivityLogs.ps1`. This prompts you for details like the subscription ID and event hubs namespace where you want data to end up. You can also run the command silently without prompts by providing these details as parameters:
 
 ```powershell
-  .\enable-AzureActivityLogs.ps1 -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey" -Silent
+.\enable-AzureActivityLogs.ps1 -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey" -Silent
 ```
 
 Without providing a subscription ID, the script enables collection of the Activity Log on all subscriptions to which the logged in user has access. There's also an option to provide a list of subscription IDs on which you'd like to enable the Log Profile as input to the script:
 
 ```powershell
-  .\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey"
+.\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey"
 ```
 
 To learn more about the parameters and available options for executing this script, just type ` Get-Help .\Enable-AzureActivityLogs.ps1 -detailed`.
