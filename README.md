@@ -19,12 +19,50 @@ This guide shows you how to set up Log Analytics to monitor two types of Azure d
 
 * **Virtual Machines** - For Azure Resource Manager virtual machines, you install the OMS agent on either [Linux](https://docs.microsoft.com/azure/virtual-machines/extensions/oms-linux) or [Windows](https://docs.microsoft.com/azure/virtual-machines/extensions/oms-windows) using the Azure VM extensions and include the OMS workspace ID and key in the VM extension settings.
 * **Azure Resource Diagnostic Logs** - For [Azure Resource Diagnostic Logs](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-of-diagnostic-logs), you create a Resource Diagnostic Setting on the resource you want to send the data, and [specify the OMS workspace where you want the data to go](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitor-stream-diagnostic-logs-log-analytics).
-
-You can also [set up your Azure Activity Log to go to Log Analytics manually](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity#configuration).
+* **Azure Activity Log** - For [the Azure Activity Log](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-activity-logs), you [enable the Log Analytics connector to an Azure subscription](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity#configuration).
 
 ### Step 1: Setup policy for greenfield enablement
 
+[TODO]
+
 ### Step 2: Run scripts for brownfield enablement
+Before you begin, make sure that you have:
+  1. [Installed the latest Azure PowerShell module](https://docs.microsoft.com/powershell/azure/install-azurerm-ps).
+  2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
+
+  ```powershell
+  powershell.exe -ExecutionPolicy RemoteSigned
+  ```
+
+  [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
+  3. Downloaded the scripts from the PowerShell Gallery:
+    * [Enable-AzureDiagnostics](https://www.powershellgallery.com/packages/Enable-AzureDiagnostics/1.0/DisplayScript). You can do this simply by typing `Install-Script -Name Enable-AzureDiagnostics`.
+    * [Enable-AzureActivityLogs]() [TODO]
+    * [TODO script for vm extensions]
+
+You can also manually download the scripts from the **scripts** folder in this repo.
+
+Once you have the scripts installed and have verified that you have the correct execution policy setup to run the script, you can simply execute the scripts.
+
+#### Enable-AzureRmDiagnostics
+This script enables Azure resource diagnostic settings on your Azure resources to route them to a particular Log Analytics workspace. To run it, type `.\Enable-AzureRMDiagnostics.ps1`. This prompts you for details like the resource ID of the workspace data should be sent to, the resource types and log categories of data that should be sent, and the scope (subscription/resource groups) of enablement. You can also run the command silently without promting by providing these details as parameters:
+
+```powershell
+
+.\Enable-AzureRMDiagnostics.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE
+    /providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512"
+    -ResourceType "Microsoft.Sql/servers/databases" -ResourceGroup "RGName" -Force
+    
+```
+
+To learn more about the parameters and available options for executing this script, just type ` Get-Help .\Enable-AzureRMDiagnostics.ps1 -detailed`.
+
+#### Enable-AzureActivityLogs
+This script enables the Activity Log connector for a Log Analytics workspace on selected subscriptions.
+
+[TODO]
+
+#### [TODO Script for VMs]
 
 ## Send data to Event Hubs
 This guide shows you how to set up Azure Monitor to send data to SIEMs for two types of Azure data:
@@ -36,7 +74,25 @@ You can also send other types of Azure Monitor data to Event Hubs by [setting th
 
 ### Step 1: Setup policy for greenfield enablement
 
+[TODO]
+
 ### Step 2: Run scripts for brownfield enablement
+
+[TODO]
+
+## Additional Considerations
+Before using the steps above, we recommend carefully considering the cost and scalability of onboarding. Below are some limitations and scale considerations to be aware of.
+
+### Azure Resource Manager limitations
+[This document](https://docs.microsoft.com/azure/azure-subscription-service-limits#subscription-limits) describes subscription-wide Azure Resource Manager limits. Most noteably among these are the subscription limits for *Resource Manager API Reads* and *Resource Manager API Writes*. The scripts provided execute both read and write resource manager API calls in your subscriptions, and in larger subscriptions (over 1,200 resources) you may have to run the script, multiple times over the course of a few hours to update all your existing resources.
+
+### Log Analytics workspace limitations
+[This document](https://docs.microsoft.com/azure/azure-subscription-service-limits#log-analytics-limits) describes workspace limitations for Log Analytics. Outside of the Free tier, you should not encounter limits in terms of data ingestion.
+
+[Note also the regional support for Log Analytics](https://azure.microsoft.com/global-infrastructure/services/). While you can route data across regions into Log Analytics, you should consider the [geographic data residency, sovereignty, compliance, and resiliency requirements](https://azure.microsoft.com/global-infrastructure/geographies/).
+
+### Event Hubs limitations
+There are some [restrictions on the number of event hubs per namespace](https://docs.microsoft.com/azure/azure-subscription-service-limits#event-hubs-limits). It is also important to consider the throughput units neeeded and possibly set up [autoscale for Event Hubs throughput units](https://docs.microsoft.com/azure/event-hubs/event-hubs-auto-inflate). You can also learn more about [event hubs availability and consistency](https://docs.microsoft.com/azure/event-hubs/event-hubs-availability-and-consistency).
 
 ## Next Steps
 Once you've done both greenfield and brownfield enablement across your environment, we suggest you get more familiar with the services and functionality that were used above. This will help if you ever need to customize, modify, or undo the enablement you did in the previous steps. Here are some helpful links for further understanding:
