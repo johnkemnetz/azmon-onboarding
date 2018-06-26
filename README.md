@@ -27,19 +27,20 @@ This guide shows you how to set up Log Analytics to monitor two types of Azure d
 
 ### Step 2: Run scripts for brownfield enablement
 Before you begin, make sure that you have:
-  1. [Installed the latest Azure PowerShell module](https://docs.microsoft.com/powershell/azure/install-azurerm-ps).
-  2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
-      ```powershell
-        powershell.exe -ExecutionPolicy RemoteSigned
-      ```
+1. [Installed the latest Azure PowerShell module](https://docs.microsoft.com/powershell/azure/install-azurerm-ps).
+2. Given appropriate permissions for the script to run. The safest way to do this is by running the script in a PowerShell process that has the RemoteSigned execution policy.
 
-     [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
-     
-  3. Downloaded the scripts from the PowerShell Gallery:
-    * [Enable-AzureDiagnostics](https://www.powershellgallery.com/packages/Enable-AzureDiagnostics/1.0/DisplayScript). You can do this simply by typing `Install-Script -Name Enable-AzureDiagnostics`.
-    * [Enable-AzureActivityLogs]() [TODO]
-    * [TODO script for vm extensions]
+  ```powershell
+    powershell.exe -ExecutionPolicy RemoteSigned
+  ```
+
+  [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
+
+3. Downloaded the scripts from the PowerShell Gallery:
+  * [Enable-AzureDiagnostics](https://www.powershellgallery.com/packages/Enable-AzureDiagnostics/1.0/DisplayScript). You can do this simply by typing `Install-Script -Name Enable-AzureDiagnostics`.
+  * [Enable-AzureActivityLogs]() [TODO]
+  * [TODO script for vm extensions]
 
 You can also manually download the scripts from the **scripts** folder in this repo.
 
