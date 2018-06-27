@@ -38,7 +38,7 @@ Before you begin, make sure that you have:
     [You can learn more here.](https:/go.microsoft.com/fwlink/?LinkID=135170)
 
 3. Downloaded the scripts from the PowerShell Gallery:
-    * [Enable-AzureDiagnostics](https://www.powershellgallery.com/packages/Enable-AzureDiagnostics/1.0/DisplayScript). You can do this simply by typing `Install-Script -Name Enable-AzureDiagnostics`.
+    * [Enable-AzureRMDiagnostics](https://www.powershellgallery.com/packages/Enable-AzureRMDiagnostics/2.52/DisplayScript). You can do this simply by typing `Install-Script -Name Enable-AzureDiagnostics`.
     * [Enable-AzureActivityLogs]() [TODO]
     * [TODO script for vm extensions]
 
