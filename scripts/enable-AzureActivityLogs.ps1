@@ -102,6 +102,7 @@ http://aka.ms/azmononboarding
 
 .LINK
     This script posted to and discussed at the following locations:
+    http://aka.ms/azmononboarding
 #>
 
 Param
