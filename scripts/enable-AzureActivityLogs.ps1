@@ -96,7 +96,7 @@ http://aka.ms/azmononboarding
 
 .NOTES
    AUTHOR: Jim Britt Senior Program Manager - AzureCAT 
-   LASTEDIT: May 1, 2018
+   LASTEDIT: July 6, 2018
 
     Initial Release
 
