@@ -1,4 +1,4 @@
-﻿<#PSScriptInfo
+<#PSScriptInfo
 
 .VERSION 1.0
 
@@ -15,6 +15,7 @@
 .LICENSEURI 
 
 .PROJECTURI 
+http://aka.ms/azmononboarding
 
 .ICONURI 
 
@@ -25,7 +26,7 @@
 .EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
-  May 1, 2018
+  July 6, 2018
   Initial Release
 
 #>
@@ -44,7 +45,7 @@
 .PARAMETER Silent
     Specify silet if you want to execute the script without prompting
 
-.PARAMETER WSRESOURCEID    
+.PARAMETER WSID    
     The resourceID of your OMS workspace within Azure
 
 .PARAMETER SubId
@@ -55,11 +56,11 @@
     The Event Hub RuleID of the target Event Hub to store Azure Activity Logs 
 
 .EXAMPLE
-  .\enable-AzureActivityLogs.ps1 -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512"
+  .\enable-AzureActivityLogs.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512"
   Take in parameters for WSRESOURCEID and SubscriptionID and prompts for confirmation
 
 .EXAMPLE
-  .\enable-AzureActivityLogs.ps1 -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512" -Silent
+  .\enable-AzureActivityLogs.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS" -SubscriptionId "fd2323a9-2324-4d2a-90f6-7e6c2fe03512" -Silent
     Take in parameters for WSRESOURCEID and SubscriptionID and executes silently without prompting
 
 .EXAMPLE
@@ -75,16 +76,17 @@
     Leverage this example to provide a text file of subscription IDs (one per line) in a txt file and configure
     each subscription's activity logs to be sent to the specified EventHub RuleID.
 
+.EXAMPLE
 .\enable-AzureActivityLogs.ps1 -EHID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/EH-EAST-USE/providers/Microsoft.EventHub/namespaces/EH001/AuthorizationRules/RootManageSharedAccessKey"
-    Leverage this example to provide gather a list of subscription to process and configure (from currently authenticated user
+    Leverage this example to gather a list of subscriptions to process and configure (from currently authenticated user
     context).  Each subscription's activity logs will to be sent to the specified EventHub RuleID.
 
 .EXAMPLE
-  .\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS"
+  .\enable-AzureActivityLogs.ps1 -SubID $(Get-Content -Path C:\Temp\subscriptions.txt) -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS"
     Leverage this example to provide a text file of subscription IDs (one per line) in a txt file and configure
     each subscription's activity logs to be sent to the specified Log Analytics Workspace (Resource ID).
 
-.\enable-AzureActivityLogs.ps1 -WSRESOURCEID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS"
+.\enable-AzureActivityLogs.ps1 -WSID "/subscriptions/fd2323a9-2324-4d2a-90f6-7e6c2fe03512/resourceGroups/OI-EAST-USE/providers/Microsoft.OperationalInsights/workspaces/OMSWS"
     Gather a list of subscriptions to process and configure (from currently authenticated user context).
     Each subscription's activity logs will to be sent to the specified Log Analytics Workspace (Resource ID).
 
@@ -109,8 +111,8 @@ Param
     $EHID,
 
     [parameter(Mandatory=$true,
-    ParameterSetName="WSRESOURCEID")]
-    $WSRESOURCEID,
+    ParameterSetName="WSID")]
+    $WSID,
 
     [Parameter(Mandatory=$False)][array]$SubID,
     [Parameter(Mandatory=$False)][Switch]$Silent
@@ -150,11 +152,11 @@ function ValidateID
     param
     (
         [Parameter(Mandatory=$False)]$EHID,
-        [Parameter(Mandatory=$False)]$WSRESOURCEID,
+        [Parameter(Mandatory=$False)]$WSID,
         [Parameter(Mandatory=$False)]$SubID
 
     )
-    # Function to validate EHID, WSRESOURCEID, SUBID 
+    # Function to validate EHID, WSID, SUBID 
     $ValidID = $False
     $cnt = 0
     
@@ -175,11 +177,11 @@ function ValidateID
             $ValidID = $False
         }
     }
-    IF($WSRESOURCEID)
+    IF($WSID)
     {
-        $cnt = $($WSRESOURCEID.Split("/").Count+1)
-        if($($WSRESOURCEID.Split("/", $Cnt)[1]) -eq "Subscriptions" -and
-        $($WSRESOURCEID.Split("/", $Cnt)[6]) -eq "Microsoft.OperationalInsights" -and
+        $cnt = $($WSID.Split("/").Count+1)
+        if($($WSID.Split("/", $Cnt)[1]) -eq "Subscriptions" -and
+        $($WSID.Split("/", $Cnt)[6]) -eq "Microsoft.OperationalInsights" -and
         $cnt -eq 10)
         
         {
@@ -189,7 +191,7 @@ function ValidateID
         
         else
         {
-            write-host "Invalid value passed to WSRESOURCEID" -ForegroundColor Red
+            write-host "Invalid value passed to WSID" -ForegroundColor Red
             $ValidID = $False
         }
 
@@ -217,9 +219,9 @@ If($EHID)
     $ValidID = ValidateID -EHID $EHID
 }
 
-If($WSRESOURCEID)
+If($WSID)
 {
-    $ValidId = ValidateID -WSRESOURCEID $WSRESOURCEID
+    $ValidId = ValidateID -WSID $WSID
 }
 
 If($ValidID)
@@ -239,7 +241,7 @@ If($ValidID)
     elseif($SubID.count -eq 0)
     {
         # Below line to go against all subscriptions
-        $subs = get-azurermsubscription | Where-Object{$_.Name -eq "jbritt"}
+        $subs = get-azurermsubscription
     }
     elseif($SubID.Count -gt 1)
     {
@@ -260,7 +262,6 @@ If($ValidID)
                 }
             }
             $ValidID = $ValidSubID
-            #$Subs
         }
     }
 
@@ -329,12 +330,12 @@ If($ValidID)
             $logProfiles | select "#", Subscription, Enabled | ft
 
         }
-        If($WSRESOURCEID)
+        If($WSID)
         {
-            $SplitCnt = $($WSRESOURCEID.Split("/").Count+1)
-            $RG = $($WSRESOURCEID.Split("/", $SplitCnt)[4])
-            $WKSPACE = $($WSRESOURCEID.Split("/", $SplitCnt)[8])
-            $WorkspaceSubID = $($WSRESOURCEID.Split("/", $SplitCnt)[2])
+            $SplitCnt = $($WSID.Split("/").Count+1)
+            $RG = $($WSID.Split("/", $SplitCnt)[4])
+            $WKSPACE = $($WSID.Split("/", $SplitCnt)[8])
+            $WorkspaceSubID = $($WSID.Split("/", $SplitCnt)[2])
 
             # Build a table to represent configuration state
             $logProfiles = @()
@@ -380,5 +381,4 @@ If($ValidID)
 if(!$ValidID)
 {
     Write-host "Either Event Hub RuleID, SubscriptionID or ResourceID for Workspace is not in the proper format" -ForegroundColor Yellow
-    #write-host "Ex: /subscriptions/<SubID>/resourcegroups/<RG>/providers/microsoft.operationalinsights/workspaces/<WSName>" -ForegroundColor Cyan 
 }
